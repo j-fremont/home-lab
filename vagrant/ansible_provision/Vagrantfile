@@ -1,0 +1,14 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.define "web", primary: true do |web|
+    web.vm.box ="generic/debian12"
+    web.vm.network "forwarded_port", guest: 80, host:8080
+    web.vm.provision "ansible" do |ansible|
+      ansible.playbook="ansible/playbook.yml"
+      ansible.sudo = true
+    end
+  end
+end

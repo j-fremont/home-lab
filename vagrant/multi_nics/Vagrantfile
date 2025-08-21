@@ -1,0 +1,25 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+$nginx_install = <<SCRIPT
+  apt-get update && apt-get upgrade
+  if [ ! -x /usr/sbin/nginx ]; then
+    apt-get install -y nginx;
+  fi
+SCRIPT
+
+Vagrant.configure("2") do |config|
+  config.vm.define "HQ" do |hq|
+        hq.vm.box = "generic/debian12"
+        hq.vm.network "private_network", :type => 'dhcp'
+        hq.vm.network "private_network", :type => 'dhcp'
+        hq.vm.provider "virtualbox" do |vb|
+          vb.name = "HQ"
+          vb.cpus = 2
+          vb.customize ["modifyvm", :id, "--nic2", "hostonly"]
+          vb.customize ["modifyvm", :id, "--nic3", "natnetwork"]
+          vb.customize ["modifyvm", :id, "--nat-network3", "NatNetwork"]
+        end
+        hq.vm.provision "shell", inline: $nginx_install
+  end
+end
