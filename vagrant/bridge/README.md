@@ -56,5 +56,5 @@ ip addr
        valid_lft 86340sec preferred_lft 86340sec
 ```
 
-
+Puis ouvrir http://192.168.1.28 depuis le host.
 
