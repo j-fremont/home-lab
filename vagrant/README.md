@@ -12,9 +12,13 @@ vagrant plugin install vagrant-proxyconf
 On peut alors utiliser dans le Vagrantfile.
 
 ```
-config.proxy.http = "http://adresse.du.proxy:port"
-config.proxy.https = "http://adresse.du.proxy:port"
-config.proxy.no_proxy = "localhost,127.0.0.1"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  if Vagrant.has_plugin?("vagrant-proxyconf")
+    config.proxy.http = "http://adresse.ip.du.proxy:port"
+    config.proxy.https = "http://adresse.ip.du.proxy:port"
+    config.proxy.no_proxy = "localhost,127.0.0.1"
+  end
+...
 ```
 
 # Commandes
