@@ -4,11 +4,14 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "web", primary: true do |web|
-    web.vm.box ="generic/debian12"
+    web.vm.box = "generic/debian12"
     web.vm.network "forwarded_port", guest: 80, host:8080
     web.vm.provision "ansible" do |ansible|
-      ansible.playbook="ansible/playbook.yml"
+      ansible.playbook = "ansible/playbook.yml"
+      ansible.compatibility_mode = "2.0"
       ansible.sudo = true
+      #ansible.become = true
+      #ansible.become_user = "vagrant"
     end
   end
 end

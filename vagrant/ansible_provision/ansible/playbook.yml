@@ -3,5 +3,4 @@
   remote_user: vagrant
   tasks:
     - name: Install apache2 web server
-      apt: name=apache2 state=present
-      
+      apt: update_cache=true name=apache2 state=present

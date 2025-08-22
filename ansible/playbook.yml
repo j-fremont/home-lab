@@ -1,0 +1,66 @@
+- name: deployment
+  hosts: rpi-3-server
+#  vars:
+#    REGISTRY: "{{ lookup('env', 'REGISTRY') }}"
+#    APP_FRONTEND: "{{ lookup('env', 'APP_FRONTEND') }}"
+#    APP_BACKEND: "{{ lookup('env', 'APP_BACKEND') }}"
+#    TEST_VERSION: "{{ lookup('env', 'TEST_VERSION') }}"
+#    ISOPROD_VERSION: "{{ lookup('env', 'ISOPROD_VERSION') }}"
+#    DOCKER_AUTH_CONFIG: "{{ lookup('env', 'DOCKER_AUTH_CONFIG') }}"
+
+  tasks:
+#  - name: Ensure Docker Config Directory Exists
+#    file:
+#      path: ~/.docker
+#      state: directory
+
+#  - name: Copy Docker Config
+#    ansible.builtin.copy:
+#      content: "{{ DOCKER_AUTH_CONFIG }}"
+#      dest: "~/.docker/config.json"
+
+#  - name: Pull Docker Image Frontend
+#    community.docker.docker_image:
+#      name: "{{ REGISTRY }}/{{ APP_FRONTEND }}"
+#      source: pull
+#      tag: "{{ item.version }}"
+#    loop:
+#      - { version: "{{ TEST_VERSION }}" }
+#      - { version: "{{ ISOPROD_VERSION }}" }
+
+#  - name: Pull Docker Image Backend
+#    community.docker.docker_image:
+#      name: "{{ REGISTRY }}/{{ APP_BACKEND }}"
+#      source: pull
+#      tag: "{{ item.version }}"
+#    loop:
+#      - { version: "{{ TEST_VERSION }}" }
+#      - { version: "{{ ISOPROD_VERSION }}" }
+
+#  - name: Create Docker Environnement Variables File
+#    file:
+#      path: "docker-compose.env"
+#      state: touch
+
+#  - name: Write Docker Environnement Variables In File
+#    copy:
+#      dest: "docker-compose.env"
+#      content: |
+#        TEST_VERSION="{{ TEST_VERSION }}"
+#        ISOPROD_VERSION="{{ ISOPROD_VERSION }}"
+
+#  - name: Copy Docker Compose Files
+#    copy:
+#      src:  "{{ item.file }}"
+#      dest: .
+#    loop:
+#      - { file: "../docker/vm-test/docker-compose.yml" }
+#      - { file: "../docker/ecs-ci-template.yml" }
+
+  - name: Start Services
+    community.docker.docker_compose_v2:
+      project_src: .
+      files:
+      - docker-compose.yml
+#      env_files:
+#      - docker-compose.env

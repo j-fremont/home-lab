@@ -1,0 +1,9 @@
+all:
+  children:
+    rpi-3-server:
+      hosts:
+        deployment:
+          ansible_host: 192.168.1.10
+
+  vars:
+    ansible_ssh_user: rpi_ansible
