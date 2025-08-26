@@ -1,0 +1,49 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+$nginx_install_and_db_hostname = <<SCRIPT
+  apt-get update && apt-get upgrade
+  if [ ! -x /usr/sbin/nginx ]; then
+    apt-get install -y nginx;
+  fi
+  echo '127.0.0.1 localhost web01\10.0.2.12 db01' > /etc/hosts
+SCRIPT
+
+Vagrant.configure("2") do |config|
+  config.vm.define "web" do |web|
+    web.vm.box = "generic/debian12"
+    web.vm.network :public_network, :ip => "192.168.1.50"
+    web.vm.network :private_network, :ip => "10.0.2.10", virtualbox__intnet: "NatNetwork"
+    web.vm.provider "virtualbox" do |vbox|
+      vbox.memory = 2048
+      vbox.cpus = 2
+    end
+    web.vm.provision "shell", inline: $nginx_install_and_db_hostname
+  end
+  config.vm.define "db" do |db|
+    db.vm.box = "generic/debian12"
+    db.vm.hostname = "db01"
+    db.vm.network :private_network, :ip => "10.0.2.12", virtualbox__intnet: "NatNetwork"
+    db.vm.provider "virtualbox" do |vbox|
+      vbox.memory = 4096
+      vbox.cpus = 2
+    end
+    db.vm.provision 'shell' do |s|
+      s.path = 'install_postgres.sh'
+      s.privileged = true
+    end
+  end
+  config.vm.define "nexus" do |nexus|
+    nexus.vm.box = "generic/debian12"
+    nexus.vm.network :public_network, :ip => "192.168.1.51"
+    nexus.vm.network :private_network, :ip => "10.0.2.11", virtualbox__intnet: "NatNetwork"
+    nexus.vm.provider "virtualbox" do |vbox|
+      vbox.memory = 4096
+      vbox.cpus = 2
+    end
+    nexus.vm.provision 'shell' do |s|
+      s.path = 'install_nexus.sh'
+      s.privileged = true
+    end
+  end
+end

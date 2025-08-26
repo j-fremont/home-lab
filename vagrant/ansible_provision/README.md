@@ -10,4 +10,9 @@ https://www.vagrantup.com/docs/provisioning/ansible_common.html#compatibility_mo
 ansible-playbook: error: unrecognized arguments: --sudo
 ```
 
+Il faut ajouter l'option.
+
+```
+ansible.compatibility_mode = "2.0"
+```
 
