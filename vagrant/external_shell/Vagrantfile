@@ -1,0 +1,16 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.define "web", primary: true do |web|
+    web.vm.box ="generic/debian12"
+    web.vm.network "forwarded_port", guest:80, host:8888
+    web.vm.synced_folder ".", "/vagrant"
+    web.vm.provision "shell", path: "nginx-install.sh"
+    web.vm.provider "virtualbox" do |vbox|
+      vbox.memory = 2048
+      vbox.cpus = 2
+    end
+  end
+end

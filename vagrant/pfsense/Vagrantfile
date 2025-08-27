@@ -14,19 +14,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "pfsense" do |pfsense|
     pfsense.vm.box = "kennyl/pfsense"
     pfsense.vm.box_version = "2.4.0"
+    pfsense.vm.network :public_network, :ip => "10.91.81.198"
     pfsense.vm.network :private_network, :ip => "10.0.2.10", virtualbox__intnet: "NatNetwork"
-    pfsense.vm.network :private_network, :ip => "10.0.2.11", virtualbox__intnet: "NatNetwork"
     pfsense.vm.provider "virtualbox" do |vbox|
-      vbox.memory = 2048
-      vbox.cpus = 2
+      vbox.memory = 1024
+      vbox.cpus = 1
     end
   end
   config.vm.define "web01" do |web01|
     web01.vm.box = "generic/debian12"
     web01.vm.network :private_network, :ip => "10.0.2.20", virtualbox__intnet: "NatNetwork"
     web01.vm.provider "virtualbox" do |vbox|
-      vbox.memory = 2048
-      vbox.cpus = 2
+      vbox.memory = 1024
+      vbox.cpus = 1
     end
     web01.vm.provision "shell", inline: $nginx_install
   end
@@ -34,8 +34,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     web02.vm.box = "generic/debian12"
     web02.vm.network :private_network, :ip => "10.0.2.21", virtualbox__intnet: "NatNetwork"
     web02.vm.provider "virtualbox" do |vbox|
-      vbox.memory = 2048
-      vbox.cpus = 2
+      vbox.memory = 1024
+      vbox.cpus = 1
     end
     web02.vm.provision "shell", inline: $nginx_install
   end
