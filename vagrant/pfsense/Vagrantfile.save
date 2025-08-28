@@ -1,0 +1,43 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+$nginx_install = <<SCRIPT
+  apt-get update && apt-get upgrade
+  if [ ! -x /usr/sbin/nginx ]; then
+    apt-get install -y nginx;
+  fi
+SCRIPT
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.define "web01" do |web01|
+    web01.vm.box = "generic/debian12"
+    web01.vm.network :private_network, :ip => "192.168.2.11", virtualbox__intnet: "MyNetwork"
+    web01.vm.provision "shell", inline: $nginx_install
+    web01.vm.provider "virtualbox" do |vbox|
+      vbox.memory = 1024
+      vbox.cpus = 1
+      #vbox.customize ["modifyvm", :id, "--nic2", "hostonly"]
+    end
+  end
+#  config.vm.define "web02" do |web02|
+#    web02.vm.box = "generic/debian12"
+#    web02.vm.network :private_network, :ip => "192.168.2.12", virtualbox__intnet: true
+#    #web02.vm.provision "shell", inline: $nginx_install
+#    web02.vm.provider "virtualbox" do |vbox|
+#      vbox.memory = 1024
+#      vbox.cpus = 1
+#    end
+#  end
+  config.vm.define "pfsense" do |pfsense|
+    pfsense.vm.box = "kennyl/pfsense"
+    pfsense.vm.box_version = "2.4.0"
+    #pfsense.vm.network :public_network, :ip => "10.91.81.198"
+    pfsense.vm.network :private_network, :ip => "192.168.2.10", virtualbox__intnet: "MyNetwork"
+    pfsense.vm.provider "virtualbox" do |vbox|
+      vbox.memory = 1024
+      vbox.cpus = 1
+    end
+  end
+end

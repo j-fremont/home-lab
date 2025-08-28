@@ -23,6 +23,8 @@ Lancer Nexus.
 
 # Gitlab
 
+https://docs.gitlab.com/install/package/debian/
+
 ```
 sudo EXTERNAL_URL="https://gitlab.jfremont.fr" apt install gitlab-ce
 sudo apt install -y curl
